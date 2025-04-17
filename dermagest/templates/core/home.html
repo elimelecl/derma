@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaGest - Gestión Clínica Dermatológica</title>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale: 'es'
+        });
+        calendar.render();
+      });
+
+    </script>
+    <link href="{% static '/assets/css/base.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-clinic-medical"></i>
+                    <span>DermaGest</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-name">Dra. Mariana López</div>
+                        <div class="user-role">Médica Dermatóloga</div>
+                    </div>
+                    <div class="avatar">ML</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="sidebar">
+        <ul class="menu">
+            <li class="menu-item active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Agenda</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('pacientes')">
+                <i class="fas fa-user-injured"></i>
+                <span>Pacientes</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('procedimientos')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Procedimientos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('productos')">
+                <i class="fas fa-pills"></i>
+                <span>Productos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('facturacion')">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturación</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('reportes')">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('configuracion')">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </li>
+        </ul>
+    </nav>
+    
+    <main class="main-content">
+        <div class="page-title">
+            <h1>Agenda Médica</h1>
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Cita</button>
+        </div>
+        
+        <div id="card-calendario" class="card">
+            <div class="card-body">
+                <div id='calendar'></div>
+            </div>
+        </div>
+        
+        <div id="card-citas-dia" class="card">
+            <div class="card-header">
+                <h2>Citas para hoy (15 de Abril, 2025)</h2>
+                <div>
+                    <select>
+                        <option>Todos los médicos</option>
+                        <option selected>Dra. Mariana López</option>
+                        <option>Dr. Carlos Rodríguez</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Paciente</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>08:30</td>
+                            <td>Ana María Gómez</td>
+                            <td>Tratamiento acné</td>
+                            <td><span class="badge badge-complete">Completada</span></td>
+                            <td>
+                                <button onclick="ver_detalle_cita()" class="btn">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>09:15</td>
+                            <td>Roberto Sánchez</td>
+                            <td>Revisión lunar</td>
+                            <td><span class="badge badge-complete">Completada</span></td>
+                            <td>
+                                <button onclick="ver_detalle_cita()" class="btn">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>10:00</td>
+                            <td>Elena Martínez</td>
+                            <td>Consulta general</td>
+                            <td><span class="badge badge-active">En curso</span></td>
+                            <td>
+                                <button class="btn btn-primary">Atender</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>11:30</td>
+                            <td>Luis Hernández</td>
+                            <td>Tratamiento rosácea</td>
+                            <td><span class="badge badge-pending">Pendiente</span></td>
+                            <td>
+                                <button class="btn">Iniciar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div hidden id="card-detalle-cita">
+            <div class="page-title">
+                <h1>Detalle de Cita</h1>
+                <div class="appointment-actions">
+                    <button class="btn btn-danger">Cancelar</button>
+                    <button class="btn btn-success">Finalizar y Reportar</button>
+                </div>
+            </div>
+            
+            <div class="patient-info">
+                <h3>Información del Paciente</h3>
+                <div class="patient-data">
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">Nombre:</div>
+                        <div>Elena Martínez Ruiz</div>
+                    </div>
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">ID:</div>
+                        <div>98765432</div>
+                    </div>
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">Edad:</div>
+                        <div>34 años</div>
+                    </div>
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">Teléfono:</div>
+                        <div>555-123-4567</div>
+                    </div>
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">EPS:</div>
+                        <div>Sura</div>
+                    </div>
+                    <div class="patient-data-item">
+                        <div class="patient-data-label">Médico:</div>
+                        <div>Dra. Mariana López</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="tab active">Procedimientos</div>
+            <div class="tab">Productos</div>
+            <div class="tab">Observaciones</div>
+            <div class="tab">Historial</div>
+        </div>
+        
+        <div class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Procedimientos Realizados</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Tipo de Procedimiento:</label>
+                        <select>
+                            <option>Seleccionar procedimiento...</option>
+                            <option>Limpieza facial profunda</option>
+                            <option>Tratamiento despigmentante</option>
+                            <option>Aplicación de toxina botulínica</option>
+                            <option>Hidratación con ácido hialurónico</option>
+                            <option>Dermoabrasión</option>
+                            <option>Otro (especificar)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción detallada:</label>
+                        <textarea rows="3" placeholder="Detalles del procedimiento realizado..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Área tratada:</label>
+                                <select>
+                                    <option>Seleccionar área...</option>
+                                    <option>Rostro completo</option>
+                                    <option>Frente</option>
+                                    <option>Pómulos</option>
+                                    <option>Nariz</option>
+                                    <option>Mentón</option>
+                                    <option>Cuello</option>
+                                    <option>Escote</option>
+                                    <option>Espalda</option>
+                                    <option>Brazos</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Duración (minutos):</label>
+                                <input type="number" value="30">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Los procedimientos agregados aparecerán en la lista a continuación.
+                    </div>
+                    
+                    <div>
+                        <h4>Procedimientos agregados:</h4>
+                        <div class="tag">Limpieza facial profunda <i class="fas fa-times"></i></div>
+                    </div>
+                    
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Procedimiento</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+    <script src='{% static "assets/js/index.js"%}'></script>

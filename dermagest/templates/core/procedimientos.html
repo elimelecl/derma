@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaGest - Gestión de Procedimientos Dermatológicos</title>
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-light: #cce5ff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            margin-right: 20px;
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: white;
+            height: calc(100vh - 70px);
+            position: fixed;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+        }
+        
+        .menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .menu-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        
+        .page-title {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-standard {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .badge-special {
+            background-color: #6f42c1;
+            color: white;
+        }
+        
+        .badge-advanced {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        tr:hover {
+            background-color: var(--gray);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            padding-left: 35px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .procedure-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .procedure-card:hover {
+            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+        }
+        
+        .procedure-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .procedure-info {
+            flex: 1;
+        }
+        
+        .procedure-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .procedure-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .procedure-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .procedure-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+            
+            .menu-item span {
+                display: none;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-clinic-medical"></i>
+                    <span>DermaGest</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-name">Dra. Mariana López</div>
+                        <div class="user-role">Médica Dermatóloga</div>
+                    </div>
+                    <div class="avatar">ML</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="sidebar">
+        <ul class="menu">
+            <li class="menu-item" onclick="redirigir_pagina('home')">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Agenda</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('pacientes')">
+                <i class="fas fa-user-injured"></i>
+                <span>Pacientes</span>
+            </li>
+            <li class="menu-item active" onclick="redirigir_pagina('procedimientos')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Procedimientos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('productos')">
+                <i class="fas fa-pills"></i>
+                <span>Productos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('facturacion')">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturación</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('reportes')">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('configuracion')">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </li>
+        </ul>
+    </nav>
+    
+    <main class="main-content">
+        <div class="page-title">
+            <h1>Gestión de Procedimientos</h1>
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Procedimiento</button>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">28</div>
+                <div class="stat-label">Procedimientos Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">142</div>
+                <div class="stat-label">Realizados este mes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Procedimientos Especiales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Valoración Promedio</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active">Todos</div>
+            <div class="tab">Estándar</div>
+            <div class="tab">Especiales</div>
+            <div class="tab">Avanzados</div>
+        </div>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar procedimientos...">
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Lista de Procedimientos</h2>
+                <div>
+                    <select>
+                        <option>Ordenar por</option>
+                        <option>Nombre (A-Z)</option>
+                        <option>Más recientes</option>
+                        <option>Más utilizados</option>
+                        <option>Duración</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="procedure-card">
+                    <div class="procedure-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="procedure-info">
+                        <div class="procedure-name">Limpieza facial profunda</div>
+                        <div class="procedure-description">Limpieza completa con extracción de comedones y aplicación de mascarilla hidratante.</div>
+                        <div class="procedure-meta">
+                            <div><i class="fas fa-clock"></i> 60 min</div>
+                            <div><i class="fas fa-tag"></i> <span class="badge badge-standard">Estándar</span></div>
+                            <div><i class="fas fa-chart-line"></i> 64 realizados</div>
+                        </div>
+                    </div>
+                    <div class="procedure-actions">
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn">Ver detalles</button>
+                    </div>
+                </div>
+                
+                <div class="procedure-card">
+                    <div class="procedure-icon">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <div class="procedure-info">
+                        <div class="procedure-name">Aplicación de toxina botulínica</div>
+                        <div class="procedure-description">Aplicación de neurotoxina para reducir arrugas de expresión y líneas finas.</div>
+                        <div class="procedure-meta">
+                            <div><i class="fas fa-clock"></i> 30 min</div>
+                            <div><i class="fas fa-tag"></i> <span class="badge badge-special">Especial</span></div>
+                            <div><i class="fas fa-chart-line"></i> 48 realizados</div>
+                        </div>
+                    </div>
+                    <div class="procedure-actions">
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn">Ver detalles</button>
+                    </div>
+                </div>
+                
+                <div class="procedure-card">
+                    <div class="procedure-icon">
+                        <i class="fas fa-burn"></i>
+                    </div>
+                    <div class="procedure-info">
+                        <div class="procedure-name">Tratamiento despigmentante</div>
+                        <div class="procedure-description">Tratamiento para manchas y decoloraciones con ácidos específicos y despigmentantes.</div>
+                        <div class="procedure-meta">
+                            <div><i class="fas fa-clock"></i> 45 min</div>
+                            <div><i class="fas fa-tag"></i> <span class="badge badge-standard">Estándar</span></div>
+                            <div><i class="fas fa-chart-line"></i> 37 realizados</div>
+                        </div>
+                    </div>
+                    <div class="procedure-actions">
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn">Ver detalles</button>
+                    </div>
+                </div>
+                
+                <div class="procedure-card">
+                    <div class="procedure-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="procedure-info">
+                        <div class="procedure-name">Hidratación con ácido hialurónico</div>
+                        <div class="procedure-description">Aplicación de ácido hialurónico para hidratación profunda y restauración del volumen facial.</div>
+                        <div class="procedure-meta">
+                            <div><i class="fas fa-clock"></i> 40 min</div>
+                            <div><i class="fas fa-tag"></i> <span class="badge badge-special">Especial</span></div>
+                            <div><i class="fas fa-chart-line"></i> 29 realizados</div>
+                        </div>
+                    </div>
+                    <div class="procedure-actions">
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn">Ver detalles</button>
+                    </div>
+                </div>
+                
+                <div class="procedure-card">
+                    <div class="procedure-icon">
+                        <i class="fas fa-laser"></i>
+                    </div>
+                    <div class="procedure-info">
+                        <div class="procedure-name">Dermoabrasión láser</div>
+                        <div class="procedure-description">Procedimiento con láser para eliminar capas superficiales de piel y estimular regeneración celular.</div>
+                        <div class="procedure-meta">
+                            <div><i class="fas fa-clock"></i> 50 min</div>
+                            <div><i class="fas fa-tag"></i> <span class="badge badge-advanced">Avanzado</span></div>
+                            <div><i class="fas fa-chart-line"></i> 16 realizados</div>
+                        </div>
+                    </div>
+                    <div class="procedure-actions">
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn">Ver detalles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-title">
+            <h1>Detalles del Procedimiento</h1>
+            <div>
+                <button class="btn btn-danger">Eliminar</button>
+                <button class="btn btn-success">Guardar Cambios</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Limpieza facial profunda</h2>
+                <span class="badge badge-standard">Estándar</span>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Nombre del procedimiento:</label>
+                            <input type="text" value="Limpieza facial profunda">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Categoría:</label>
+                            <select>
+                                <option>Seleccionar categoría...</option>
+                                <option selected>Estándar</option>
+                                <option>Especial</option>
+                                <option>Avanzado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea rows="3">Limpieza completa con extracción de comedones y aplicación de mascarilla hidratante.</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Duración aproximada (minutos):</label>
+                            <input type="number" value="60">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Precio base:</label>
+                            <input type="text" value="$120.000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Áreas que se pueden tratar:</label>
+                    <div>
+                        <div class="tag">Rostro completo <i class="fas fa-times"></i></div>
+                        <div class="tag">Cuello <i class="fas fa-times"></i></div>
+                        <div class="tag">Escote <i class="fas fa-times"></i></div>
+                        <button class="btn">+ Añadir área</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Precauciones:</label>
+                    <textarea rows="3">No recomendado para pacientes con rosácea severa o dermatitis activa. Evitar exposición solar directa durante 24 horas después del procedimiento.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Productos asociados:</label>
+                    <div>
+                        <div class="tag">Gel limpiador para piel grasa <i class="fas fa-times"></i></div>
+                        <div class="tag">Mascarilla hidratante <i class="fas fa-times"></i></div>
+                        <div class="tag">Sérum calmante <i class="fas fa-times"></i></div>
+                        <button class="btn">+ Añadir producto</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Instrucciones post-procedimiento:</label>
+                    <textarea rows="3">Aplicar crema hidratante recomendada cada 4 horas. Evitar exposición solar. No usar exfoliantes por 72 horas. Aplicar protector solar de amplio espectro.</textarea>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Último uso: 10/04/2025 - Paciente: Ana María Gómez
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src='{% static "assets/js/index.js"%}'></script>
+</body>
+</html>

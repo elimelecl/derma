@@ -1,0 +1,894 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaGest - Configuración del Sistema</title>
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-light: #cce5ff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            margin-right: 20px;
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: white;
+            height: calc(100vh - 70px);
+            position: fixed;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+        }
+        
+        .menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .menu-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        
+        .page-title {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-option-title {
+            font-weight: 500;
+        }
+        
+        .settings-option-description {
+            font-size: 12px;
+            color: #777;
+            margin-top: 3px;
+        }
+        
+        .user-list {
+            list-style: none;
+        }
+        
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-item-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .user-item-info {
+            flex: 1;
+        }
+        
+        .user-item-name {
+            font-weight: 500;
+        }
+        
+        .user-item-role {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .user-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+            
+            .menu-item span {
+                display: none;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-clinic-medical"></i>
+                    <span>DermaGest</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-name">Dra. Mariana López</div>
+                        <div class="user-role">Médica Dermatóloga</div>
+                    </div>
+                    <div class="avatar">ML</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <nav class="sidebar">
+        <ul class="menu">
+            <li class="menu-item" onclick="redirigir_pagina('home')">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Agenda</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('pacientes')">
+                <i class="fas fa-user-injured"></i>
+                <span>Pacientes</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('procedimientos')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Procedimientos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('productos')">
+                <i class="fas fa-pills"></i>
+                <span>Productos</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('facturacion')">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturación</span>
+            </li>
+            <li class="menu-item" onclick="redirigir_pagina('reportes')">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </li>
+            <li class="menu-item active" onclick="redirigir_pagina('configuracion')">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </li>
+        </ul>
+    </nav>
+
+    
+    <main class="main-content">
+        <div class="page-title">
+            <h1>Configuración del Sistema</h1>
+            <button class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active">General</div>
+            <div class="tab">Usuarios</div>
+            <div class="tab">Notificaciones</div>
+            <div class="tab">Personalización</div>
+            <div class="tab">Seguridad</div>
+            <div class="tab">Facturación</div>
+        </div>
+        
+        <div class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Configuración General</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Nombre de la Clínica:</label>
+                        <input type="text" value="Centro Dermatológico MedSkin">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>NIT/RUT:</label>
+                                <input type="text" value="900.456.789-3">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Teléfono:</label>
+                                <input type="tel" value="+57 1 234 5678">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Email de contacto:</label>
+                                <input type="email" value="contacto@medskin.com.co">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Sitio web:</label>
+                                <input type="url" value="https://www.medskin.com.co">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Dirección:</label>
+                        <input type="text" value="Calle 123 #45-67, Edificio Médico, Consultorio 302">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Ciudad:</label>
+                                <input type="text" value="Bogotá">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label>Código postal:</label>
+                                <input type="text" value="110111">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Horario de trabajo</div>
+                            <div class="settings-option-description">Define los días y horarios en que la clínica está disponible para agendar citas</div>
+                        </div>
+                        <button class="btn">Configurar horarios</button>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Duración predeterminada de las citas</div>
+                            <div class="settings-option-description">Duración estándar para nuevas citas</div>
+                        </div>
+                        <select style="width: 150px;">
+                            <option>15 minutos</option>
+                            <option selected>30 minutos</option>
+                            <option>45 minutos</option>
+                            <option>60 minutos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Idioma del sistema</div>
+                            <div class="settings-option-description">Idioma principal para la interfaz</div>
+                        </div>
+                        <select style="width: 150px;">
+                            <option selected>Español</option>
+                            <option>English</option>
+                            <option>Português</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Formato de fecha</div>
+                            <div class="settings-option-description">Define cómo se muestran las fechas</div>
+                        </div>
+                        <select style="width: 150px;">
+                            <option selected>DD/MM/AAAA</option>
+                            <option>MM/DD/AAAA</option>
+                            <option>AAAA-MM-DD</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Zona horaria</div>
+                            <div class="settings-option-description">Establece la zona horaria para fechas y horas</div>
+                        </div>
+                        <select style="width: 250px;">
+                            <option selected>América/Bogotá (UTC-5)</option>
+                            <option>América/Ciudad de Mexico (UTC-6)</option>
+                            <option>América/Santiago (UTC-4)</option>
+                            <option>América/Buenos Aires (UTC-3)</option>
+                            <option>Europa/Madrid (UTC+1)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Gestión de Usuarios</h2>
+                    <button class="btn btn-primary"><i class="fas fa-user-plus"></i> Nuevo Usuario</button>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="text" placeholder="Buscar usuarios..." style="max-width: 300px;">
+                    </div>
+                    
+                    <ul class="user-list">
+                        <li class="user-item">
+                            <div class="user-item-avatar">ML</div>
+                            <div class="user-item-info">
+                                <div class="user-item-name">Dra. Mariana López</div>
+                                <div class="user-item-role">Administrador, Médico</div>
+                            </div>
+                            <div class="user-item-actions">
+                                <button class="btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="user-item">
+                            <div class="user-item-avatar">CR</div>
+                            <div class="user-item-info">
+                                <div class="user-item-name">Dr. Carlos Rodríguez</div>
+                                <div class="user-item-role">Médico</div>
+                            </div>
+                            <div class="user-item-actions">
+                                <button class="btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="user-item">
+                            <div class="user-item-avatar">JP</div>
+                            <div class="user-item-info">
+                                <div class="user-item-name">Juliana Pérez</div>
+                                <div class="user-item-role">Recepcionista</div>
+                            </div>
+                            <div class="user-item-actions">
+                                <button class="btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="user-item">
+                            <div class="user-item-avatar">LR</div>
+                            <div class="user-item-info">
+                                <div class="user-item-name">Laura Restrepo</div>
+                                <div class="user-item-role">Auxiliar</div>
+                            </div>
+                            <div class="user-item-actions">
+                                <button class="btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Roles y Permisos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Rol:</label>
+                                <select>
+                                    <option>Administrador</option>
+                                    <option selected>Médico</option>
+                                    <option>Recepcionista</option>
+                                    <option>Auxiliar</option>
+                                </select>
+                            </div>
+                            
+                            <h4>Permisos</h4>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Ver expediente clínico</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Crear/editar historias clínicas</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Gestionar agenda</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Gestionar procedimientos</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Gestionar productos</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Facturación</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div>
+                                    <div class="settings-option-title">Administración</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <button class="btn btn-primary">Guardar Permisos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Configuración de Notificaciones</h2>
+                </div>
+                <div class="card-body">
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Recordatorios de citas para pacientes</div>
+                            <div class="settings-option-description">Enviar recordatorios automáticos a los pacientes antes de su cita</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Tiempo de anticipación para recordatorios</div>
+                            <div class="settings-option-description">¿Cuándo se envían los recordatorios?</div>
+                        </div>
+                        <select style="width: 200px;">
+                            <option>1 hora antes</option>
+                            <option>3 horas antes</option>
+                            <option>12 horas antes</option>
+                            <option selected>24 horas antes</option>
+                            <option>48 horas antes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Método de envío de recordatorios</div>
+                            <div class="settings-option-description">Selecciona cómo se envían los recordatorios</div>
+                        </div>
+                        <div>
+                            <div style="margin-bottom: 5px;">
+                                <input type="checkbox" id="email_notif" checked style="width: auto;">
+                                <label for="email_notif" style="display: inline;">Email</label>
+                            </div>
+                            <div style="margin-bottom: 5px;">
+                                <input type="checkbox" id="sms_notif" checked style="width: auto;">
+                                <label for="sms_notif" style="display: inline;">SMS</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="whatsapp_notif" style="width: auto;">
+                                <label for="whatsapp_notif" style="display: inline;">WhatsApp</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Notificaciones de cancelación</div>
+                            <div class="settings-option-description">Notificar cuando un paciente cancela su cita</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Permitir confirmación por parte del paciente</div>
+                            <div class="settings-option-description">El paciente puede confirmar su asistencia mediante el enlace en la notificación</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div>
+                            <div class="settings-option-title">Notificar sobre inventario bajo</div>
+                            <div class="settings-option-description">Recibir alertas cuando algún producto está por agotarse</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Plantilla de email para recordatorio:</label>
+                        <textarea rows="5">Estimado/a [NOMBRE_PACIENTE], 
+
+Le recordamos que tiene una cita programada en Centro Dermatológico MedSkin para el día [FECHA_CITA] a las [HORA_CITA] con [NOMBRE_MEDICO]. 
+
+Para confirmar su asistencia, por favor haga clic en el siguiente enlace: [ENLACE_CONFIRMACION]
+
+Si necesita reprogramar, por favor comuníquese con nosotros al +57 1 234 5678.
+
+Atentamente,
+Centro Dermatológico MedSkin</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src='{% static "assets/js/index.js"%}'></script>
+</body>
+</html>
+
